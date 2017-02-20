@@ -1,9 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Library">
+    tools:context=".Library"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/leftText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@color/red"
+        android:padding="10dp"
+        android:text="@string/left_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/leftText"
+        android:background="@color/purple"
+        android:padding="10dp"
+        android:text="@string/below_left_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@color/pink"
+        android:padding="10dp"
+        android:text="@string/right_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/deep_purple"
+        android:padding="10dp"
+        android:text="@string/left_text"/>
+
+
+    <TextView
+        android:id="@+id/bottomCenterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/indigo"
+        android:padding="10dp"
+        android:text="@string/bottom_center_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomCenterText"
+        android:layout_centerHorizontal="true"
+        android:background="@color/blue"
+        android:padding="10dp"
+        android:text="@string/above_bottom_center_text"/>
+
 
 </RelativeLayout>
