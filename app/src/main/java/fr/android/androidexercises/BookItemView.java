@@ -33,6 +33,6 @@ public class BookItemView extends LinearLayout {
     public void bindView(Book book) {
         // TODO setText()
         this.nameTextView.setText(book.name);
-        this.priceTextView.setText(String.valueOf(book.price));
+        this.priceTextView.setText(String.valueOf(book.price) + '€');
     }
 }
