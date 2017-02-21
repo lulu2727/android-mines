@@ -1,5 +1,9 @@
 package fr.android.androidexercises;
 
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
@@ -15,10 +19,20 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         getActivity();
     }
 
-    public void takeScreenshot(String name) {
-        //Spoon.screenshot(getCurrentActivity(), name);
+    public void testLogin() throws Exception{
+        Espresso.onView(ViewMatchers.withId(R.id.usernameEdit)).perform(ViewActions.typeText("lulu2727"));
+        Espresso.onView(ViewMatchers.withId(R.id.passwordEdit)).perform(ViewActions.typeText("secret"));
+
+        ViewActions.closeSoftKeyboard();
+
+        Espresso.onView(ViewMatchers.withId(R.id.loginButton)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.loggedText)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
+//    public void takeScreenshot(String name) {
+//        //Spoon.screenshot(getCurrentActivity(), name);
+//    }
+//
 //    public Activity getCurrentActivity() {
 //        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
 //        instrumentation.waitForIdleSync();
