@@ -1,7 +1,17 @@
 package fr.android.androidexercises;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -12,21 +22,25 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
-public class LibraryActivity extends AppCompatActivity {
+public class ListFragment extends Fragment {
 
-    private List<Book> books;
+    private final String url = "http://henri-potier.xebia.fr/";
 
+    private RecyclerView recyclerView;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_library);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.list_book, container, false);
+
+        this.recyclerView = (RecyclerView) view.findViewById(R.id.bookListView);
 
         // Plant logger cf. Android Timber
         Timber.plant(new Timber.DebugTree());
 
         // TODO build Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://henri-potier.xebia.fr/")
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -44,6 +58,10 @@ public class LibraryActivity extends AppCompatActivity {
                 List<Book> books = response.body();
                 for(int i = 0; i < books.size(); i++){
                     Timber.i(books.get(i).getTitle() + " - " + books.get(i).getPrice());
+
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    // TODO déguelasse
+                    recyclerView.setAdapter(new BookRecyclerAdapter(LayoutInflater.from(getActivity()), books));
                 }
             }
 
@@ -53,8 +71,10 @@ public class LibraryActivity extends AppCompatActivity {
             }
         });
 
-
-        // TODO display book as a list
+        return view;
     }
 
+    public interface OnSelectBookListener {
+        public void onSelectBook();
+    }
 }
