@@ -22,13 +22,20 @@ public class BookDetailsFragment extends Fragment {
 
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
         TextView priceTextView = (TextView) view.findViewById(R.id.priceTextView);
-//        TextView synopsisTextView = (TextView) view.findViewById(R.id.synopsisTextView);
+        TextView synopsisTextView = (TextView) view.findViewById(R.id.synopsisTextView);
 
         ImageView bookImageView = (ImageView) view.findViewById(R.id.bookImageView);
 
         titleTextView.setText(book.getTitle());
         priceTextView.setText(book.getPrice() + '€');
-//        synopsisTextView.setText(book.)
+        String synopsis = "";
+        String[] synopsisArray = book.getSynopsis();
+
+        for(int i = 0; i < synopsisArray.length; i++){
+            synopsis += synopsisArray[i] + System.getProperty ("line.separator");
+        }
+
+        synopsisTextView.setText(book.getSynopsis()[0] + book.getSynopsis()[1]);
 
         Glide.with(this.getContext())
                 .load(book.getCover())

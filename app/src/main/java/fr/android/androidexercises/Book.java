@@ -9,12 +9,28 @@ public class Book implements Parcelable {
     private String title;
     private String price;
     private String cover;
+    private String[] synopsis;
 
     protected Book(Parcel in) {
         isbn = in.readString();
         title = in.readString();
         price = in.readString();
         cover = in.readString();
+        synopsis = in.createStringArray();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(isbn);
+        dest.writeString(title);
+        dest.writeString(price);
+        dest.writeString(cover);
+        dest.writeStringArray(synopsis);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -61,6 +77,14 @@ public class Book implements Parcelable {
         this.cover = cover;
     }
 
+    public String[] getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String[] synopsis) {
+        this.synopsis = synopsis;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,16 +101,4 @@ public class Book implements Parcelable {
         return isbn.hashCode();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(isbn);
-        dest.writeString(title);
-        dest.writeString(price);
-        dest.writeString(cover);
-    }
 }

@@ -13,7 +13,7 @@ import fr.android.androidexercises.R;
 
 public class BookItemView extends LinearLayout {
 
-    private TextView nameTextView, priceTextView;
+    private TextView nameTextView, priceTextView, synopsisTextView;
 
     private ImageView bookImageView;
 
@@ -32,15 +32,14 @@ public class BookItemView extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        // TODO findViewById()
+
         this.nameTextView = (TextView) findViewById(R.id.nameTextView);
         this.priceTextView = (TextView) findViewById(R.id.priceTextView);
+        this.synopsisTextView = (TextView) findViewById(R.id.synopsisTextView);
         this.bookImageView = (ImageView) findViewById(R.id.bookImageView);
-
     }
 
     public void bindView(Book book) {
-        // TODO setText()
         this.nameTextView.setText(book.getTitle());
         this.priceTextView.setText(book.getPrice() + '€');
 

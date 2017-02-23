@@ -1,6 +1,9 @@
 package fr.android.androidexercises;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,9 +33,15 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnSe
     }
 
     @Override
-    public void onSelectBook() {
+    public void onSelectBook(Book book) {
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("book", book);
+        Fragment fragment = new BookDetailsFragment();
+        fragment.setArguments(bundle);
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerFrameLayout, new BookDetailsFragment(), BookDetailsFragment.class.getSimpleName())
+                .replace(R.id.containerFrameLayout, fragment, BookDetailsFragment.class.getSimpleName())
                 .addToBackStack(null)
                 .commit();
     }

@@ -16,10 +16,12 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter {
 
     private final LayoutInflater inflater;
     private final List<Book> books;
+    private OnItemClickListener listener;
 
-    public BookRecyclerAdapter(LayoutInflater from, List<Book> books) {
+    public BookRecyclerAdapter(LayoutInflater from, List<Book> books, OnItemClickListener listener) {
         this.inflater = from;
         this.books = books;
+        this.listener = listener;
     }
 
     @Override
@@ -36,15 +38,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter {
         itemView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("book", book);
-                Fragment fragment = new BookDetailsFragment();
-                fragment.setArguments(bundle);
-
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.containerFrameLayout, fragment, BookDetailsFragment.class.getSimpleName()).addToBackStack(null).commit();
+                listener.onItemClick(book);
             }
         });
     }
@@ -58,7 +52,9 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter {
         public ViewHolder(View itemView){
             super(itemView);
         }
-//        public on
+    }
 
+    public interface OnItemClickListener {
+        void onItemClick(Book book);
     }
 }

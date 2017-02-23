@@ -1,5 +1,6 @@
 package fr.android.androidexercises;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,11 +23,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements BookRecyclerAdapter.OnItemClickListener {
 
     private final String url = "http://henri-potier.xebia.fr/";
 
     private RecyclerView recyclerView;
+
+    private OnSelectBookListener listener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.listener = (OnSelectBookListener) context;
+    }
 
     @Nullable
     @Override
@@ -58,11 +67,10 @@ public class ListFragment extends Fragment {
                 List<Book> books = response.body();
                 for(int i = 0; i < books.size(); i++){
                     Timber.i(books.get(i).getTitle() + " - " + books.get(i).getPrice());
-
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    // TODO déguelasse
-                    recyclerView.setAdapter(new BookRecyclerAdapter(LayoutInflater.from(getActivity()), books));
                 }
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                // TODO déguelasse
+                recyclerView.setAdapter(new BookRecyclerAdapter(LayoutInflater.from(getActivity()), books, ListFragment.this));
             }
 
             @Override
@@ -74,7 +82,12 @@ public class ListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onItemClick(Book book) {
+        listener.onSelectBook(book);
+    }
+
     public interface OnSelectBookListener {
-        public void onSelectBook();
+        public void onSelectBook(Book book);
     }
 }
