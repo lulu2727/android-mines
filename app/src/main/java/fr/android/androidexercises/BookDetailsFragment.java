@@ -6,10 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * Created by ludovic on 22/02/2017.
- */
+import com.bumptech.glide.Glide;
 
 public class BookDetailsFragment extends Fragment {
 
@@ -17,6 +17,22 @@ public class BookDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.book_details, container, false);
+
+        Book book = getArguments().getParcelable("book");
+
+        TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
+        TextView priceTextView = (TextView) view.findViewById(R.id.priceTextView);
+//        TextView synopsisTextView = (TextView) view.findViewById(R.id.synopsisTextView);
+
+        ImageView bookImageView = (ImageView) view.findViewById(R.id.bookImageView);
+
+        titleTextView.setText(book.getTitle());
+        priceTextView.setText(book.getPrice() + '€');
+//        synopsisTextView.setText(book.)
+
+        Glide.with(this.getContext())
+                .load(book.getCover())
+                .into(bookImageView);
 
         return view;
     }

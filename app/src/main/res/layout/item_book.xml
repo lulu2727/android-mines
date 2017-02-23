@@ -7,18 +7,24 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/nameTextView"
+    <ImageView
+        android:id="@+id/bookImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        tools:text="Garry Potier Tome 1"/>
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_marginLeft="3dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="3"/>
 
     <TextView
         android:id="@+id/priceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:text="15€"
-        android:layout_marginLeft="5dp"/>
+        tools:text="15€"/>
 </fr.android.androidexercises.BookItemView>

@@ -1,5 +1,10 @@
 package fr.android.androidexercises;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +31,20 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         BookItemView itemView =  (BookItemView) holder.itemView;
-        itemView.bindView(books.get(position));
+        final Book book = books.get(position);
+        itemView.bindView(book);
         itemView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                holder.listener.selectBook();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("book", book);
+                Fragment fragment = new BookDetailsFragment();
+                fragment.setArguments(bundle);
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.containerFrameLayout, fragment, BookDetailsFragment.class.getSimpleName()).addToBackStack(null).commit();
             }
         });
     }
