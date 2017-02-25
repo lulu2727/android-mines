@@ -1,5 +1,6 @@
 package fr.android.androidexercises;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,11 +26,19 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
-        if(savedInstanceState == null){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.leftContainerFrameLayout, new ListFragment(), ListFragment.class.getSimpleName())
+                    .commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rightContainerFrameLayout, new BookDetailsFragment(), BookDetailsFragment.class.getSimpleName())
+                    .commit();
+        } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.containerFrameLayout, new ListFragment(), ListFragment.class.getSimpleName())
                     .commit();
         }
+//
     }
 
     @Override
@@ -40,9 +49,17 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnSe
         Fragment fragment = new BookDetailsFragment();
         fragment.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerFrameLayout, fragment, BookDetailsFragment.class.getSimpleName())
-                .addToBackStack(null)
-                .commit();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rightContainerFrameLayout, fragment, BookDetailsFragment.class.getSimpleName())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.containerFrameLayout, fragment, BookDetailsFragment.class.getSimpleName())
+                    .addToBackStack(null)
+                    .commit();
+        }
+
     }
 }
