@@ -1,19 +1,16 @@
-package fr.android.androidexercises;
+package fr.android.lsinquin;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,8 +25,9 @@ public class ListFragment extends Fragment implements BookRecyclerAdapter.OnItem
     private final String url = "http://henri-potier.xebia.fr/";
 
     private RecyclerView recyclerView;
-
-    private OnSelectBookListener listener;
+    private BookRecyclerAdapter adapter;
+    public ArrayList<Book> books;
+    public OnSelectBookListener listener;
 
     @Override
     public void onAttach(Context context) {
@@ -40,37 +38,55 @@ public class ListFragment extends Fragment implements BookRecyclerAdapter.OnItem
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Timber.i("OnCreateView ListFragment");
         View view = inflater.inflate(R.layout.list_book, container, false);
 
+        if (savedInstanceState == null) {
+            //conditional to not load data if the user come from details view thanks to the back button;
+            if (this.books == null) {
+                this.books = new ArrayList<>();
+                getBooksData();
+            }
+        } else {
+            Timber.i("Retrieving saved data");
+            ArrayList<Book> savedBooks = savedInstanceState.<Book>getParcelableArrayList("books");
+            this.books = savedBooks;
+        }
         this.recyclerView = (RecyclerView) view.findViewById(R.id.bookListView);
+        this.adapter = new BookRecyclerAdapter(LayoutInflater.from(getActivity()), books, ListFragment.this);
 
-        // Plant logger cf. Android Timber
-        Timber.plant(new Timber.DebugTree());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
 
-        // TODO build Retrofit
+        return view;
+    }
+
+    public void getBooksData() {
+
+        // Plant logger cf. Android Timbe
+        Timber.i("Loading Books data");
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        // TODO create a service
         HenriPotierService service = retrofit.create(HenriPotierService.class);
 
-        // TODO listBooks()
-        Call<List<Book>> books = service.listBooks();
+        Call<List<Book>> booksCall = service.listBooks();
 
         // TODO enqueue call and display book title
         // TODO log books
-        books.enqueue(new Callback<List<Book>>() {
+        booksCall.enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-                List<Book> books = response.body();
+                books.addAll(response.body());
+                adapter.notifyDataSetChanged();
+
                 for(int i = 0; i < books.size(); i++){
-                    Timber.i(books.get(i).getTitle() + " - " + books.get(i).getPrice());
+                    Timber.d(books.get(i).getTitle() + " - " + books.get(i).getPrice());
                 }
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                // TODO déguelasse
-                recyclerView.setAdapter(new BookRecyclerAdapter(LayoutInflater.from(getActivity()), books, ListFragment.this));
+
             }
 
             @Override
@@ -78,8 +94,12 @@ public class ListFragment extends Fragment implements BookRecyclerAdapter.OnItem
                 Timber.e(t.getMessage());
             }
         });
+    }
 
-        return view;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("books", books);
     }
 
     @Override
@@ -88,6 +108,6 @@ public class ListFragment extends Fragment implements BookRecyclerAdapter.OnItem
     }
 
     public interface OnSelectBookListener {
-        public void onSelectBook(Book book);
+        void onSelectBook(Book book);
     }
 }

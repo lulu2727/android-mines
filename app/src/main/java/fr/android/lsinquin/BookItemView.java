@@ -1,4 +1,4 @@
-package fr.android.androidexercises;
+package fr.android.lsinquin;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,9 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import fr.android.androidexercises.Book;
-import fr.android.androidexercises.R;
 
 public class BookItemView extends LinearLayout {
 
